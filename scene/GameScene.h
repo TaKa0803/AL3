@@ -1,5 +1,6 @@
 #pragma once
 
+#include<DebugCamera.h>
 #include "Audio.h"
 #include "DirectXCommon.h"
 #include "Input.h"
@@ -56,4 +57,10 @@ private: // メンバ変数
 	ViewProjection viewProjection_;
 
 	Player* player_ = nullptr;
+
+	// デバックカメラ有効
+	bool isDebugCameraActive_ = false;
+
+	// デバックカメラ
+	DebugCamera* debugcamera_ = nullptr;
 };
