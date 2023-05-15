@@ -18,6 +18,11 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 	
 }
 
+Player::~Player() {
+	for (PlayerBullet* bullet : bullets_) {
+		delete bullet;
+	}
+}
 
 void Player::Update() {
 	worldTransform_.UpdateMatrix();
@@ -90,8 +95,8 @@ worldTransform_.matWorld_ = MakeAffineMatrix(
 
 Attack();
 //弾更新
-if (bullet_) {
-		bullet_->Update();
+for (PlayerBullet* bullet:bullets_) {
+		bullet->Update();
 }
 	
 	ImGui::Begin("Player Pos");
@@ -103,13 +108,14 @@ if (bullet_) {
 }
 
 void Player::Attack() {
-	if (input_->PushKey(DIK_1)) {
+	if (input_->PushKey(DIK_SPACE)) {
+		
 		//弾を生成し、初期化
 		PlayerBullet* newBullet = new PlayerBullet();
 		newBullet->Initialize(model_, worldTransform_.translation_);
 
 		//弾を登録する
-		bullet_ = newBullet;
+		bullets_.push_back(newBullet);
 	}
 }
 
@@ -118,7 +124,7 @@ void Player::Draw(ViewProjection view) {
 	//プレイヤー描画
 	model_->Draw(worldTransform_, view, textureHandle_); 
 	//弾描画
-	if (bullet_) {
-		bullet_->Draw(view);
+	for (PlayerBullet*bullet:bullets_) {
+		bullet->Draw(view);
 	}
 }

@@ -3,11 +3,14 @@
 #include "Model.h"
 #include <Input.h>
 #include<PlayerBullet.h>
+#include<list>
 
 //自キャラ
 class Player {
 public:
 	void Initialize(Model*model,uint32_t textureHandle);
+
+	~Player();
 
 	void Update();
 
@@ -24,5 +27,5 @@ public:
 	uint32_t textureHandle_ = 0u;
 
 	//弾
-	PlayerBullet*bullet_=nullptr;
+	std::list<PlayerBullet*>bullets_;
 };
