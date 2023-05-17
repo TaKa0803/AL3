@@ -1,6 +1,7 @@
 #include<Enemy.h>
 #include <cassert>
 #include<Matrix.h>
+#include"player.h"
 
 //イニシャライズ
 void Enemy::Initialize(Model* model, uint32_t textureHandle) {
@@ -16,6 +17,7 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle) {
 
 void Enemy::ApproachFazeInitialize() { timer = kFireIntervaal; }
 
+Vector3 Enemy::GetWorldPosition() { return worldTransform_.translation_; }
 
 bool Enemy::Approach() {
 	// 移動
@@ -75,10 +77,30 @@ Vector3 TransformNormall(const Vector3& v, const Matrix4x4& m) {
 	};
 }
 
+//二点の差分ベクトルの計算(v1→v2)
+Vector3 DifferenceVector3(Vector3 v1, Vector3 v2) {
+	return {
+		v2.x - v1.x, 
+	    v2.y - v1.y,
+	    v2.z - v1.z,
+	};
+}
+
+
 void Enemy::Fire() {
 		// 弾の速度
 		const float kBulletSpeed = -1.0f;
-		Vector3 velocity(0, 0, kBulletSpeed);
+		
+		//自キャラのワールド座標を取得
+	    Vector3 player1 = player_->GetWorldPosition();
+		//敵キャラのワールド座標を求める
+	    Vector3 Enemy1 = GetWorldPosition();
+		
+		//差分ベクトルと正規化とスカラー倍
+	    Vector3 velocity = Scalar(kBulletSpeed, Normalize(Subtract(Enemy1,player1)));
+
+
+
 
 		// 自機の向きに回転
 		velocity = TransformNormall(velocity, worldTransform_.matWorld_);

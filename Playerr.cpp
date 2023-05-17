@@ -24,6 +24,10 @@ Player::~Player() {
 	}
 }
 
+Vector3 Player::GetWorldPosition() { return worldTransform_.translation_; }
+
+
+
 void Player::Update() {
 	worldTransform_.UpdateMatrix();
 	//移動

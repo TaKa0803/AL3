@@ -18,6 +18,8 @@ public:
 
 	void Draw(ViewProjection view);
 
+	Vector3 GetWorldPosition();
+
 	private:
 
 	Input* input_ = nullptr;

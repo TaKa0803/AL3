@@ -3,6 +3,8 @@
 #include "WorldTransform.h"
 #include "EnemyBullet.h"
 #include <Input.h>
+class Player;
+
 class Enemy {
 public:
 	//syoki
@@ -18,7 +20,12 @@ public:
 
 	bool Approach();
 	bool Leave();
-	private:
+
+	void SetPlayer(Player* player) { player_ = player; }
+	
+	Vector3 GetWorldPosition();
+
+private:
 	//位置
 	WorldTransform worldTransform_;
 	// モデル
@@ -43,4 +50,7 @@ public:
 	int32_t timer = 0;
 	//
 	Input* input_ = nullptr;
+
+	//自キャラ
+	Player* player_=nullptr;
 };

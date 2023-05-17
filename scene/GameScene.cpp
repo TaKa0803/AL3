@@ -35,6 +35,8 @@ void GameScene::Initialize() {
 
 	AxisIndicator::GetInstance()->SetVisible(true);
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
+
+	enemy_->SetPlayer(player_);
 }
 
 void GameScene::Update() {
