@@ -281,11 +281,52 @@ Vector3 AddVec3(Vector3 translate, Vector3 vec) {
 
 
 
-
-/*
-Matrix4x4 MakeAffineMatrix(Matrix4x4 scale, Matrix4x4 rotate, Matrix4x4 translate) {
-	
-	return Multiply(scale, Multiply(rotate, translate));
-
+// 加算
+Vector3 Add(Vector3 v1, Vector3 v2) {
+	Vector3 Answer = {
+	    v1.x + v2.x,
+	    v1.y + v2.y,
+	    v1.z + v2.z,
+	};
+	return Answer;
 }
-*/
+// 減算
+Vector3 Subtract(Vector3 v1, Vector3 v2) {
+	Vector3 Answer = {
+	    v1.x - v2.x,
+	    v1.y - v2.y,
+	    v1.z - v2.z,
+	};
+	return Answer;
+}
+// スカラー倍
+Vector3 Multipy(float scalar, Vector3 v) {
+	Vector3 Answer = {
+	    v.x * scalar,
+	    v.y * scalar,
+	    v.z * scalar,
+	};
+	return Answer;
+}
+// 内積
+float Dot(Vector3 v1, Vector3 v2) {
+	float Answer = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+	return Answer;
+}
+
+// 長さ
+float Length(Vector3 v) {
+	float length = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+	return length;
+}
+
+// 正規化
+Vector3 Normalize(Vector3 v) {
+	float length = Length(v);
+	Vector3 Answer = {
+	    v.x / length,
+	    v.y / length,
+	    v.z / length,
+	};
+	return Answer;
+}

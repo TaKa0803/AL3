@@ -1,7 +1,7 @@
 #pragma once
 #include<Vector3.h>
 #include<Matrix4x4.h>
-
+#include <math.h>
 /*
 struct Matrix4x4 {
 	float m[4][4];
@@ -33,3 +33,19 @@ Vector3 AddVec3(Vector3 translate, Vector3 vec);
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
 
 //Matrix4x4 MakeAffineMatrix(Matrix4x4 scale, Matrix4x4 rotate, Matrix4x4 translate);
+
+
+// 加算
+Vector3 Add(Vector3 v1, Vector3 v2);
+// 減算
+Vector3 Subtract(Vector3 v1, Vector3 v2);
+// スカラー倍
+Vector3 Multipy(float scalar, Vector3 v);
+// 内積
+float Dot(Vector3 v1, Vector3 v2);
+// 長さ
+float Length(Vector3 v);
+
+// 正規化
+Vector3 Normalize(Vector3 v);
+

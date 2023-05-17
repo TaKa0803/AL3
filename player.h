@@ -28,4 +28,5 @@ public:
 
 	//弾
 	std::list<PlayerBullet*>bullets_;
+	
 };

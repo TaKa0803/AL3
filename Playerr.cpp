@@ -36,8 +36,8 @@ void Player::Update() {
 	const float kCharacterRoateS = (1.0f/60.0f)*(float)M_PI;
 
 
-	const float kMoveLimitX = 10;
-	const float kMoveLimitY = 10;
+	const float kMoveLimitX = 20;
+	const float kMoveLimitY = 20;
 
 
 
@@ -98,21 +98,45 @@ Attack();
 for (PlayerBullet* bullet:bullets_) {
 		bullet->Update();
 }
-	
+
+//デスフラグの立った球を削除
+bullets_.remove_if([](PlayerBullet* bullet) {
+	if (bullet->IsDead()) {
+		delete bullet;
+		return true;
+	}
+	return false;
+});
+
+
 	ImGui::Begin("Player Pos");
 	ImGui::Text(
 	    "%4.1f/%4.1f/%4.1f", worldTransform_.translation_.x, worldTransform_.translation_.y,
 	    worldTransform_.translation_.z);
 	ImGui::End();
-	
 }
+
+//ベクトル変換
+Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
+	return {
+	    v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0],
+	    v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1],
+	    v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2],
+	};
+}
+
 
 void Player::Attack() {
 	if (input_->PushKey(DIK_SPACE)) {
-		
+		//tamanosokudo
+		const float lBulletSpeed = 5.0f;
+		Vector3 velocity(0, 0, lBulletSpeed);
+		//自機の向きに回転
+		velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+
 		//弾を生成し、初期化
 		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(model_, worldTransform_.translation_);
+		newBullet->Initialize(model_, worldTransform_.translation_, velocity);
 
 		//弾を登録する
 		bullets_.push_back(newBullet);

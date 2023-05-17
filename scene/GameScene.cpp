@@ -8,6 +8,7 @@ GameScene::~GameScene() {
 	delete model_;
 	delete player_;
 	delete debugcamera_;
+	delete enemy_;
 }
 
 void GameScene::Initialize() {
@@ -17,6 +18,7 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 
 	TextureHandle_ = TextureManager::Load("mario.jpg");
+	EnemyTextureHandle = TextureManager::Load("ushikun.jpg");
 	model_ = Model::Create();
 
 	//
@@ -24,6 +26,9 @@ void GameScene::Initialize() {
 
 	player_ = new Player();
 	player_->Initialize(model_,TextureHandle_);
+
+	enemy_ = new Enemy();
+	enemy_->Initialize(model_, EnemyTextureHandle);
 
 	// デバックカメラの生成
 	debugcamera_ = new DebugCamera(1280, 720);
@@ -34,8 +39,9 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 	player_->Update();
-	
-
+	if (enemy_) {
+		enemy_->Update();
+	}
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_1)) {
 		isDebugCameraActive_ = true;
@@ -84,6 +90,7 @@ void GameScene::Draw() {
 	/// </summary>
 
 	player_->Draw(viewProjection_);
+	enemy_->Draw(viewProjection_);
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
