@@ -10,7 +10,7 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle) {
 	textureHandle_ = textureHandle;
 
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = {10,1,0};
+	worldTransform_.translation_ = {10,1,-50};
 
 	input_ = Input::GetInstance();
 
@@ -124,7 +124,7 @@ void Enemy::Fire() {
 void Enemy::Update() { 
 	worldTransform_.UpdateMatrix();
 	
-	/*
+	
 	switch (phase_) {
 	case Enemy::Phase::Approach:
 		
@@ -141,7 +141,7 @@ void Enemy::Update() {
 	default:
 		break;
 	}
-	*/
+	
 
 	//更新処理
 	for (EnemyBullet* bullet : bullets_) {
