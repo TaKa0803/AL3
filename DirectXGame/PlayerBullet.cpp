@@ -33,6 +33,8 @@ void PlayerBullet::Update() {
 	}
 }
 
+void PlayerBullet::OnCollision() { isDead_ = false; }
+
 void PlayerBullet::Draw(const ViewProjection& viewProjection) {
 	//モデルの描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);

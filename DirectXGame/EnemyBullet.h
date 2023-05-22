@@ -15,6 +15,10 @@ public:
 	// ゲッター
 	bool IsDead() const { return isDead_; }
 
+	void OnCollision();
+
+	Vector3 GetWorldPosition() { return worldTransform_.translation_; }
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;

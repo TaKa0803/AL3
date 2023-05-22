@@ -2,6 +2,7 @@
 #include "TextureManager.h"
 #include <cassert>
 #include<AxisIndicator.h>
+#include<Matrix.h>
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
@@ -64,6 +65,41 @@ void GameScene::Update() {
 	
 }
 
+ 
+
+/*
+void GameScene::CheckAllCollosions() {
+	//判定対象AとBの座標
+	Vector3 posA, posB;
+
+	//次弾リストの取得
+	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
+	//敵弾リストの取得
+	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
+
+	#pragma region 自キャラと敵弾の当たり判定
+	posA = player_->GetWorldPosition();
+
+	//自キャラと敵弾すべての当たり判定
+	for (EnemyBullet* bullet : enemyBullets) {
+	//敵弾の座標
+		posB = bullet->GetWorldPosition();
+
+		if (Distance(posA, posB) <= 1) {
+		
+		}
+	}
+	#pragma endregion
+	#pragma region 次弾と敵キャラの当たり判定
+
+	#pragma endregion
+	#pragma region 次弾と敵弾の当たり判定
+
+	#pragma endregion
+
+
+}
+*/
 void GameScene::Draw() {
 
 	// コマンドリストの取得

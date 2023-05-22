@@ -20,6 +20,10 @@ public:
 
 	Vector3 GetWorldPosition();
 
+	void OnCollision();
+
+	const std::list<PlayerBullet*>& GetBullets() { return bullets_; }
+
 	private:
 
 	Input* input_ = nullptr;
@@ -27,6 +31,8 @@ public:
 	//モデル
 	Model* model_ = nullptr;
 	uint32_t textureHandle_ = 0u;
+
+	Vector3 size;
 
 	//弾
 	std::list<PlayerBullet*>bullets_;

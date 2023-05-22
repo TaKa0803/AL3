@@ -36,6 +36,8 @@ void EnemyBullet::Update() {
 	
 }
 
+void EnemyBullet::OnCollision() { isDead_ = false; }
+
 void EnemyBullet::Draw(const ViewProjection& viewProjection) {
 	// モデルの描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);

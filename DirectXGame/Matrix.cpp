@@ -330,3 +330,14 @@ Vector3 Normalize(Vector3 v) {
 	};
 	return Answer;
 }
+
+
+float Distance(Vector3 v1, Vector3 v2) {
+	Vector3 v = {
+		v2.x-v1.x,
+		v2.y-v1.y,
+		v2.z-v2.z
+	};
+
+	return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+}
