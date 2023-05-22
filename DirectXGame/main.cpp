@@ -74,6 +74,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		input->Update();
 		// ゲームシーンの毎フレーム処理
 		gameScene->Update();
+		// atari
+		gameScene->CheckAllCollosions();
+		
 		// 軸表示の更新
 		axisIndicator->Update();
 		// ImGui受付終了

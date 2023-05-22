@@ -24,6 +24,7 @@ public:
 
 	const std::list<PlayerBullet*>& GetBullets() { return bullets_; }
 
+	float Getsize() { return size; }
 	private:
 
 	Input* input_ = nullptr;
@@ -32,7 +33,7 @@ public:
 	Model* model_ = nullptr;
 	uint32_t textureHandle_ = 0u;
 
-	Vector3 size;
+	float size;
 
 	//弾
 	std::list<PlayerBullet*>bullets_;

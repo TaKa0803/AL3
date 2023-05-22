@@ -30,6 +30,8 @@ public:
 
 	const std::list<EnemyBullet*>& GetBullets() { return bullets_; }
 
+	float Getsize() { return size; }
+
 private:
 	//位置
 	WorldTransform worldTransform_;
@@ -58,4 +60,6 @@ private:
 
 	//自キャラ
 	Player* player_=nullptr;
+
+	float size;
 };

@@ -16,6 +16,8 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position,const Vector
 
 	//引数で受け取った速度をメンバ変数に代入
 	velocity_ = velocity;
+
+	size = 1.0f;
 }
 
 void PlayerBullet::Update() { 
@@ -33,7 +35,7 @@ void PlayerBullet::Update() {
 	}
 }
 
-void PlayerBullet::OnCollision() { isDead_ = false; }
+void PlayerBullet::OnCollision() { isDead_ = true; }
 
 void PlayerBullet::Draw(const ViewProjection& viewProjection) {
 	//モデルの描画

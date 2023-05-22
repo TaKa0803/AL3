@@ -45,11 +45,14 @@ void GameScene::Update() {
 	if (enemy_) {
 		enemy_->Update();
 	}
+
+	
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_1)) {
 		isDebugCameraActive_ = true;
 	}
 #endif // _DEBUG
+
 	if (isDebugCameraActive_) {
 		debugcamera_->Update();
 
@@ -67,7 +70,7 @@ void GameScene::Update() {
 
  
 
-/*
+
 void GameScene::CheckAllCollosions() {
 	//判定対象AとBの座標
 	Vector3 posA, posB;
@@ -85,21 +88,43 @@ void GameScene::CheckAllCollosions() {
 	//敵弾の座標
 		posB = bullet->GetWorldPosition();
 
-		if (Distance(posA, posB) <= 1) {
-		
+		if (Length(Subtract(posA,posB)) <= player_->Getsize()+bullet->Getsize()) {
+			player_->OnCollision();
+			bullet->OnCollision();
 		}
 	}
 	#pragma endregion
 	#pragma region 次弾と敵キャラの当たり判定
-
+	// 敵の座標
+	posB = enemy_->GetWorldPosition();
+	for (PlayerBullet* bulletA : playerBullets) {
+		posA = bulletA->GetWorldPosition();
+			
+			if (Length(Subtract(posA,posB))<=enemy_->Getsize()+bulletA->Getsize()) {
+				bulletA->OnCollision();
+				enemy_->OnCollision();
+			}
+		
+	}
 	#pragma endregion
 	#pragma region 次弾と敵弾の当たり判定
+	for (PlayerBullet* bulletA : playerBullets) {
+		posA = bulletA->GetWorldPosition();
+		for (EnemyBullet* bullet : enemyBullets) {
+			// 敵弾の座標
+			posB = bullet->GetWorldPosition();
 
+			if (Length(Subtract(posA, posB)) <= bulletA->Getsize() + bullet->Getsize()) {
+				bulletA->OnCollision();
+				bullet->OnCollision();
+			}
+		}
+	}
 	#pragma endregion
 
 
 }
-*/
+
 void GameScene::Draw() {
 
 	// コマンドリストの取得

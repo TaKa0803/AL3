@@ -10,15 +10,20 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle) {
 	textureHandle_ = textureHandle;
 
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = {10,1,100};
+	worldTransform_.translation_ = {10,1,0};
 
 	input_ = Input::GetInstance();
+
+	size = 1.0f;
 }
 
 void Enemy::ApproachFazeInitialize() { timer = kFireIntervaal; }
 
 Vector3 Enemy::GetWorldPosition() { return worldTransform_.translation_; }
 
+void Enemy::OnCollision() {
+
+}
 bool Enemy::Approach() {
 	// 移動
 	Vector3 move = {0, 0, -0.5f};
@@ -119,6 +124,7 @@ void Enemy::Fire() {
 void Enemy::Update() { 
 	worldTransform_.UpdateMatrix();
 	
+	/*
 	switch (phase_) {
 	case Enemy::Phase::Approach:
 		
@@ -135,7 +141,8 @@ void Enemy::Update() {
 	default:
 		break;
 	}
-	
+	*/
+
 	//更新処理
 	for (EnemyBullet* bullet : bullets_) {
 		bullet->Update();

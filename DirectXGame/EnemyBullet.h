@@ -18,6 +18,8 @@ public:
 	void OnCollision();
 
 	Vector3 GetWorldPosition() { return worldTransform_.translation_; }
+	
+	float Getsize() { return size; }
 
 private:
 	// ワールド変換データ
@@ -32,4 +34,6 @@ private:
 	int32_t deathTimer_ = 60 * 5;
 	// デスフラグ
 	bool isDead_ = false;
+
+	float size;
 };

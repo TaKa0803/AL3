@@ -15,7 +15,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 	worldTransform_.Initialize();
 	input_ = Input::GetInstance();
 
-	
+	size = 1.0f;
 	
 }
 
@@ -27,6 +27,9 @@ Player::~Player() {
 
 Vector3 Player::GetWorldPosition() { return worldTransform_.translation_; }
 
+void Player::OnCollision() {
+
+}
 
 
 void Player::Update() {
@@ -134,7 +137,7 @@ Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
 void Player::Attack() {
 	if (input_->PushKey(DIK_SPACE)) {
 		//tamanosokudo
-		const float lBulletSpeed = 5.0f;
+		const float lBulletSpeed = 1.0f;
 		Vector3 velocity(0, 0, lBulletSpeed);
 		//自機の向きに回転
 		velocity = TransformNormal(velocity, worldTransform_.matWorld_);
