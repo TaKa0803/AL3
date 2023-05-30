@@ -3,13 +3,17 @@
 #include <cassert>
 #include<AxisIndicator.h>
 #include<Matrix.h>
+
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 	delete model_;
+	delete modelSkydome_;
 	delete player_;
 	delete debugcamera_;
 	delete enemy_;
+	delete skydome;
+	
 }
 
 void GameScene::Initialize() {
@@ -20,50 +24,77 @@ void GameScene::Initialize() {
 
 	TextureHandle_ = TextureManager::Load("mario.jpg");
 	EnemyTextureHandle = TextureManager::Load("ushikun.jpg");
+	
 	model_ = Model::Create();
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	
+	//天球
+	skydome = new Skydome();
+	skydome->Initialize(modelSkydome_);
 
-	//
+#pragma region カメラ
+	// view
+	viewProjection_.farZ = 2 * skydome->GetScalar();
+	viewProjection_.translation_ = {0, 0, 0};
 	viewProjection_.Initialize();
-
-	player_ = new Player();
-	player_->Initialize(model_,TextureHandle_);
-
-	enemy_ = new Enemy();
-	enemy_->Initialize(model_, EnemyTextureHandle);
 
 	// デバックカメラの生成
 	debugcamera_ = new DebugCamera(1280, 720);
-
 	AxisIndicator::GetInstance()->SetVisible(true);
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
 
+	// レールカメラ
+	railCamera = new RailCamera();
+	railCamera->Initialize(viewProjection_);
+
+#pragma endregion
+
+	//プレイヤー
+	player_ = new Player();
+	Vector3 playerPosition(0, 0, 30);
+	player_->Initialize(model_,TextureHandle_,playerPosition);
+	//自キャラとカメラで親子関係
+	player_->SetParent(railCamera->GetWorldTransform());
+	
+	//敵
+	enemy_ = new Enemy();
+	enemy_->Initialize(model_, EnemyTextureHandle);
 	enemy_->SetPlayer(player_);
+
+	
+	
+
+	
 }
 
 void GameScene::Update() {
+	
+
+	skydome->Update();
+
 	player_->Update();
 	if (enemy_) {
 		enemy_->Update();
 	}
 
+	railCamera->Update();
+	viewProjection_.matView = railCamera->GetViewProjection().matView;
+	viewProjection_.matProjection = railCamera->GetViewProjection().matProjection;
+	
 	
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_1)) {
 		isDebugCameraActive_ = true;
 	}
 #endif // _DEBUG
-
 	if (isDebugCameraActive_) {
 		debugcamera_->Update();
-
 		viewProjection_.matView = debugcamera_->GetViewProjection().matView;
-		viewProjection_.matProjection = debugcamera_->GetViewProjection().matProjection;
-
-		viewProjection_.TransferMatrix();
+		viewProjection_.matProjection = debugcamera_->GetViewProjection().matProjection;	
 	} else {
-		viewProjection_.UpdateMatrix();
+		//viewProjection_.UpdateMatrix();
 	}
-
+	viewProjection_.TransferMatrix();
 
 	
 }
@@ -151,9 +182,14 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+	skydome->Draw(viewProjection_); 
 
 	player_->Draw(viewProjection_);
 	enemy_->Draw(viewProjection_);
+
+
+
+
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion

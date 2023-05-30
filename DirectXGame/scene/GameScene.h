@@ -10,6 +10,10 @@
 #include "WorldTransform.h"
 #include<player.h>
 #include<Enemy.h>
+#include<Skydome.h>
+#include<RailCamera.h>
+
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -58,12 +62,12 @@ private: // メンバ変数
 	/// 
 	/// 
 	Model* model_ = nullptr;
-
+	Model* modelSkydome_ = nullptr;
+	
 	ViewProjection viewProjection_;
 
 	// デバックカメラ有効
 	bool isDebugCameraActive_ = false;
-
 	// デバックカメラ
 	DebugCamera* debugcamera_ = nullptr;
 
@@ -74,4 +78,10 @@ private: // メンバ変数
 	//敵
 	Enemy* enemy_ = nullptr;
 	uint32_t EnemyTextureHandle = 0;
+
+	//天球
+	Skydome* skydome = nullptr;
+
+	//レールカメラ
+	RailCamera* railCamera = nullptr;
 };

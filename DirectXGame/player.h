@@ -8,7 +8,7 @@
 //自キャラ
 class Player {
 public:
-	void Initialize(Model*model,uint32_t textureHandle);
+	void Initialize(Model* model, uint32_t textureHandle, Vector3 position);
 
 	~Player();
 
@@ -25,6 +25,8 @@ public:
 	const std::list<PlayerBullet*>& GetBullets() { return bullets_; }
 
 	float Getsize() { return size; }
+
+	void SetParent(const WorldTransform* parent);
 	private:
 
 	Input* input_ = nullptr;

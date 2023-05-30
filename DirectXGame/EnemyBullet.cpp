@@ -8,7 +8,7 @@ void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector
 	// モデル
 	model_ = model;
 	// テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("white1x1.png");
+	textureHandle_ = TextureManager::Load("red.png");
 	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 	// 引数で受け取った初期座標をセット
@@ -22,8 +22,7 @@ void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector
 
 void EnemyBullet::Update() {
 
-	worldTransform_.UpdateMatrix();
-
+	
 	if (--deathTimer_ <= 0) {
 		isDead_ = true;
 	}
@@ -35,7 +34,7 @@ void EnemyBullet::Update() {
 		// 行列の更新
 		
 	}
-	
+	worldTransform_.UpdateMatrix();
 }
 
 void EnemyBullet::OnCollision() { isDead_ = true; }
