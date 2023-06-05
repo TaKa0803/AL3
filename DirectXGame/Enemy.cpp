@@ -2,15 +2,15 @@
 #include <cassert>
 #include<Matrix.h>
 #include"player.h"
-
+#include"GameScene.h"
 //イニシャライズ
-void Enemy::Initialize(Model* model, uint32_t textureHandle) {
+void Enemy::Initialize(Model* model, uint32_t textureHandle,Vector3 translation) {
 	assert(model);
 	model_ = model;
 	textureHandle_ = textureHandle;
 
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = {10,1,-50};
+	worldTransform_.translation_ = translation;
 
 	input_ = Input::GetInstance();
 
@@ -21,9 +21,7 @@ void Enemy::ApproachFazeInitialize() { timer = kFireIntervaal; }
 
 Vector3 Enemy::GetWorldPosition() { return worldTransform_.translation_; }
 
-void Enemy::OnCollision() {
-
-}
+void Enemy::OnCollision() { isdraw = false; }
 bool Enemy::Approach() {
 	// 移動
 	Vector3 move = {0, 0, -0.5f};
@@ -95,28 +93,19 @@ Vector3 DifferenceVector3(Vector3 v1, Vector3 v2) {
 void Enemy::Fire() {
 		// 弾の速度
 		const float kBulletSpeed = -1.0f;
-		
 		//自キャラのワールド座標を取得
 	    Vector3 player1 = player_->GetWorldPosition();
 		//敵キャラのワールド座標を求める
-	    Vector3 Enemy1 = GetWorldPosition();
-		
+	    Vector3 Enemy1 = GetWorldPosition();	
 		//差分ベクトルと正規化とスカラー倍
 	    Vector3 velocity = Scalar(kBulletSpeed, Normalize(Subtract(Enemy1,player1)));
-
-
-
-
 		// 自機の向きに回転
-		velocity = TransformNormall(velocity, worldTransform_.matWorld_);
-
+		velocity = TransformNormall(velocity, worldTransform_.matWorld_); 
 		// 弾を生成し、初期化
 		EnemyBullet* newBullet = new EnemyBullet();
 		newBullet->Initialize(model_, worldTransform_.translation_, velocity);
-
 		// 弾を登録する
-		bullets_.push_back(newBullet);
-	
+	    gameScene_->AddEnemyBullet(newBullet);
 }
 
 
@@ -124,49 +113,31 @@ void Enemy::Fire() {
 void Enemy::Update() { 
 	worldTransform_.UpdateMatrix();
 	
-	
-	switch (phase_) {
-	case Enemy::Phase::Approach:
-		
-		if (Approach() == true) {
-			phase_ = Phase::Leave;
+	if (isdraw == true) {
+		switch (phase_) {
+		case Enemy::Phase::Approach:
+
+			if (Approach() == true) {
+				phase_ = Phase::Leave;
+			}
+			break;
+		case Enemy::Phase::Leave:
+			if (Leave() == true) {
+				phase_ = Phase::Approach;
+				ApproachFazeInitialize();
+			}
+			break;
+		default:
+			break;
 		}
-		break;
-	case Enemy::Phase::Leave:
-		if (Leave() == true) {
-			phase_ = Phase::Approach;
-			ApproachFazeInitialize();
-		}
-		break;
-	default:
-		break;
 	}
-	
-
-	//更新処理
-	for (EnemyBullet* bullet : bullets_) {
-		bullet->Update();
-	}
-
-	//弾の削除
-	bullets_.remove_if([](EnemyBullet* bullet) {
-		if (bullet->IsDead()) {
-			delete bullet;
-			return true;
-		}
-		return false;
-	});
-
-	
 }
 
 
 //描画
 void Enemy::Draw(ViewProjection view) { 
-	//pureiya-
-	model_->Draw(worldTransform_, view, textureHandle_);
-
-	 for (EnemyBullet* bullet : bullets_) {
-		bullet->Draw(view);
+	if (isdraw == true) {
+		// pureiya-
+		model_->Draw(worldTransform_, view, textureHandle_);
 	}
 }

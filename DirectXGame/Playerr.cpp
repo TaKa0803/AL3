@@ -2,10 +2,9 @@
 #include <player.h>
 #include<Matrix.h>
 #include<ImGuiManager.h>
-
 #define _USE_MATH_DEFINES
 #include<math.h>
-
+#include<GameScene.h>
 
 void Player::Initialize(Model* model, uint32_t textureHandle,Vector3 position) {
 	assert(model);
@@ -21,9 +20,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle,Vector3 position) {
 }
 
 Player::~Player() {
-	for (PlayerBullet* bullet : bullets_) {
-		delete bullet;
-	}
+	
 }
 
 Vector3 Player::GetWorldPosition() { 
@@ -108,18 +105,7 @@ worldTransform_.UpdateMatrix();
 #pragma region Ammo
 
 Attack();
-// 弾更新
-for (PlayerBullet* bullet : bullets_) {
-		bullet->Update();
-}
-// デスフラグの立った球を削除
-bullets_.remove_if([](PlayerBullet* bullet) {
-	if (bullet->IsDead()) {
-		delete bullet;
-		return true;
-	}
-	return false;
-});
+
 #pragma endregion
 #pragma region Debug
 ImGui::Begin("Player Pos");
@@ -160,7 +146,7 @@ void Player::Attack() {
 		    velocity);
 
 		//弾を登録する
-		bullets_.push_back(newBullet);
+		gameScene_->AddPlayerBullet(newBullet);
 	}
 }
 
@@ -168,10 +154,6 @@ void Player::Attack() {
 void Player::Draw(ViewProjection view) {
 	//プレイヤー描画
 	model_->Draw(worldTransform_, view, textureHandle_); 
-	//弾描画
-	for (PlayerBullet*bullet:bullets_) {
-		bullet->Draw(view);
-	}
 }
 
 void Player::SetParent(const WorldTransform* parent) { worldTransform_.parent_ = parent; }

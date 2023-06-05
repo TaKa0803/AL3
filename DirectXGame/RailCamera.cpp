@@ -12,11 +12,11 @@ void RailCamera::Initialize(ViewProjection camera) {
 
 void RailCamera::Update() { 
 	
-	float movez = -1.0f;
+	//float movez = -1.0f;
 
-	//float rotate = (1.0f / 180.0f) * 3.14f;
+	//float rotate = (1.0f / 360.0f);
 
-	worldTransform_.translation_.z += movez;
+	//worldTransform_.translation_.z += movez;
 	//worldTransform_.rotation_.y += rotate;
 	
 	worldTransform_.matWorld_ = MakeAffineMatrix(

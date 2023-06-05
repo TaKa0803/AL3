@@ -5,10 +5,12 @@
 #include <Input.h>
 class Player;
 
+class GameScene;
+
 class Enemy {
 public:
 	//syoki
-	void Initialize(Model* model, uint32_t textureHandle);
+	void Initialize(Model* model, uint32_t textureHandle, Vector3 translation);
 
 	void Update();
 
@@ -28,9 +30,13 @@ public:
 
 	void OnCollision();
 
-	const std::list<EnemyBullet*>& GetBullets() { return bullets_; }
+	//const std::list<EnemyBullet*>& GetBullets() { return bullets_; }
 
 	float Getsize() { return size; }
+
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+
+	bool IsDraw() { return isdraw; }
 
 private:
 	//位置
@@ -48,8 +54,8 @@ private:
 	//攻撃モード
 	Phase phase_=Phase::Approach;
 
-	//弾
-	std::list<EnemyBullet *>bullets_;
+	bool isdraw = true;
+
 
 	//発射感覚
 	static const int kFireIntervaal = 60;
@@ -62,4 +68,7 @@ private:
 	Player* player_=nullptr;
 
 	float size;
+
+	//ゲームシーン
+	GameScene* gameScene_ = nullptr;
 };

@@ -5,6 +5,8 @@
 #include<PlayerBullet.h>
 #include<list>
 
+class GameScene;
+
 //自キャラ
 class Player {
 public:
@@ -22,11 +24,14 @@ public:
 
 	void OnCollision();
 
-	const std::list<PlayerBullet*>& GetBullets() { return bullets_; }
+	//const std::list<PlayerBullet*>& GetBullets() { return bullets_; }
 
 	float Getsize() { return size; }
 
 	void SetParent(const WorldTransform* parent);
+
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+
 	private:
 
 	Input* input_ = nullptr;
@@ -37,7 +42,7 @@ public:
 
 	float size;
 
-	//弾
-	std::list<PlayerBullet*>bullets_;
 	
+	//
+	GameScene *gameScene_;
 };
