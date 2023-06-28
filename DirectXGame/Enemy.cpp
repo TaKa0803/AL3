@@ -111,7 +111,6 @@ void Enemy::Fire() {
 
 //更新
 void Enemy::Update() { 
-	worldTransform_.UpdateMatrix();
 	
 	if (isdraw == true) {
 		switch (phase_) {
@@ -131,6 +130,8 @@ void Enemy::Update() {
 			break;
 		}
 	}
+
+	worldTransform_.UpdateMatrix();
 }
 
 

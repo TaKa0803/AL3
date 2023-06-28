@@ -2,6 +2,82 @@
 #include<assert.h>
 #include<cmath>
 
+// 透視投影行列
+Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip) {
+	return {
+	    (1.0f / aspectRatio) * (1.0f / std::tan(fovY / 2.0f)),
+	    0,
+	    0,
+	    0,
+	    0,
+	    (1.0f / std::tan(fovY / 2.0f)),
+	    0,
+	    0,
+	    0,
+	    0,
+	    (farClip / (farClip - nearClip)),
+	    1,
+	    0,
+	    0,
+	    (-nearClip * farClip / (farClip - nearClip)),
+	    0};
+}
+
+// 正射投影行列
+Matrix4x4 MakeOrthographicMatrix(
+    float left, float top, float right, float bottom, float nearClip, float farClip) {
+	return {
+	    2.0f / (right - left),
+	    0,
+	    0,
+	    0,
+	    0,
+	    2.0f / (top - bottom),
+	    0,
+	    0,
+	    0,
+	    0,
+	    1.0f / (farClip - nearClip),
+	    0,
+	    (left + right) / (left - right),
+	    (top + bottom) / (bottom - top),
+	    nearClip / (nearClip - farClip),
+	    1,
+	};
+}
+
+// ビューポート変換
+Matrix4x4 MakeViewPortMatrix(
+    float left, float top, float width, float height, float minDepth, float maxDepth) {
+	return {
+	    width / 2.0f,
+	    0,
+	    0,
+	    0,
+	    0,
+	    -(height / 2.0f),
+	    0,
+	    0,
+	    0,
+	    0,
+	    maxDepth - minDepth,
+	    0,
+	    left + (width / 2.0f),
+	    top + (height / 2.0f),
+	    minDepth,
+	    1};
+}
+
+Vector3 MultiplyV_M(const Vector3& v, const Matrix4x4& m) {
+	Vector4 vec = {
+	    v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0] + 1.0f * m.m[3][0],
+	    v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1] + 1.0f * m.m[3][1],
+	    v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2] + 1.0f * m.m[3][2],
+	    v.x * m.m[0][3] + v.y * m.m[1][3] + v.z * m.m[2][3] + 1.0f * m.m[3][3],
+	};
+	return {v.x / vec.w, v.y / vec.w, v.z / vec.w};
+}
+
 // 加算
 Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2) {
 	Matrix4x4 NEW = {
@@ -218,16 +294,19 @@ Matrix4x4 MakeRotateZMatrix(float radian) {
 	Matrix4x4 NEW = {
 	    std::cos(radian),
 	    std::sin(radian),
+		0,
 	    0,
-	    0,
+
 	    -(std::sin(radian)),
 	    std::cos(radian),
 	    0,
 	    0,
+
 	    0,
 	    0,
 	    1,
 	    0,
+
 	    0,
 	    0,
 	    0,
@@ -258,7 +337,7 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 		0, 0, 1, 0,
 		translate.x, translate.y, translate.z, 1,
 	};
-	Matrix4x4 NEW = Multiply(S, Multiply(R, T));
+	Matrix4x4 NEW = Multiply(S, Multiply(R,T));
 	return NEW;
 }
 
@@ -314,12 +393,12 @@ float Length(Vector3 v) {
 // 正規化
 Vector3 Normalize(Vector3 v) {
 	float length = Length(v);
-	Vector3 Answer = {
-	    v.x / length,
-	    v.y / length,
-	    v.z / length,
-	};
-	return Answer;
+	if (length != 0) {
+		v.x /= length;
+		v.y /= length;
+		v.z /= length;
+	}
+	return v;
 }
 
 
@@ -331,4 +410,22 @@ float Distance(Vector3 v1, Vector3 v2) {
 	};
 
 	return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+
+// 3.座標変換
+Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix) {
+	Vector3 result = {
+	    vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + vector.z * matrix.m[2][0] +1.0f * matrix.m[3][0],
+	    vector.x * matrix.m[0][1] + vector.y * matrix.m[1][1] + vector.z * matrix.m[2][1] +1.0f * matrix.m[3][1],
+	    vector.x * matrix.m[0][2] + vector.y * matrix.m[1][2] + vector.z * matrix.m[2][2] +1.0f * matrix.m[3][2],
+	};
+	float w = vector.x * matrix.m[0][3] + vector.y * matrix.m[1][3] + vector.z * matrix.m[2][3] +1.0f * matrix.m[3][3];
+
+	assert(w != 0.0f);
+
+	result.x /= w;
+	result.y /= w;
+	result.z /= w;
+
+	return result;
 }

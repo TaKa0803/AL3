@@ -10,9 +10,16 @@ void RailCamera::Initialize(ViewProjection camera) {
 
 }
 
-void RailCamera::Update() { 
-	
-	//float movez = -1.0f;
+void RailCamera::Update() {
+
+#pragma region debug
+	ImGui::Begin("Camera");
+	ImGui::DragFloat3("translation", &worldTransform_.translation_.x, 0.01f);
+	ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.01f);
+	ImGui::End();
+#pragma endregion
+
+	//float movez = 1.0f;
 
 	//float rotate = (1.0f / 360.0f);
 
@@ -27,15 +34,6 @@ void RailCamera::Update() {
 	//ビュープロジェクションを転送
 	viewProjection_.TransferMatrix();
 
-#pragma region debug
-	ImGui::Begin("Camera");
-	ImGui::Text(
-	    "translation %4.1f,%4.1f,%4.1f", worldTransform_.translation_.x,
-	    worldTransform_.translation_.y, worldTransform_.translation_.z);
-	ImGui::Text(
-	    "rotate %4.1f,%4.1f,%4.1f", worldTransform_.rotation_.x, worldTransform_.rotation_.y,
-	    worldTransform_.rotation_.z);
-	ImGui::End();
-#pragma endregion
+
 }
 

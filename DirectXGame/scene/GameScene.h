@@ -105,6 +105,9 @@ private: // メンバ変数
 	// 弾
 	std::list<PlayerBullet*> playerBullets_;
 	
+	//３Dレティクル
+	uint32_t reticleTexture_=0;
+
 	//敵
 	std::list<Enemy*> enemy_;
 	uint32_t EnemyTextureHandle = 0;
