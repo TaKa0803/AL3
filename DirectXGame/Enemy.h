@@ -3,6 +3,36 @@
 #include "WorldTransform.h"
 #include "EnemyBullet.h"
 #include <Input.h>
+#include<sound.h>
+
+#include "x3daudio.h"
+#include <assert.h>
+#include <xaudio2.h>
+#pragma comment(lib, "xaudio2.lib")
+#include <fstream>
+
+struct ChunkHeader {
+	char id[4];   // チャンク用のID
+	int32_t size; // チャンクサイズ
+};
+struct RiffHeader {
+	ChunkHeader chunk; // RIFF
+	char type[4];      // WAVE
+};
+struct FormatChunk {
+	ChunkHeader chunk; // ｆｍｔ
+	WAVEFORMATEX fmt;  // 波形フォーマット
+};
+
+// 音声データ
+struct SoundData {
+	// 波形フォーマット
+	WAVEFORMATEX wfex;
+	// バッファの先頭アドレス
+	BYTE* pBuffer;
+	// バッファのサイズ
+	unsigned int bufferSize;
+};
 class Player;
 
 class GameScene;
@@ -71,4 +101,6 @@ private:
 
 	//ゲームシーン
 	GameScene* gameScene_ = nullptr;
+
+	Sound* music_=nullptr;
 };

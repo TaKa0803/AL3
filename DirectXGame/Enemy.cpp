@@ -15,6 +15,7 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle,Vector3 translation)
 	input_ = Input::GetInstance();
 
 	size = 1.0f;
+	
 }
 
 void Enemy::ApproachFazeInitialize() { timer = kFireIntervaal; }
